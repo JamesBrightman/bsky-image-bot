@@ -1,7 +1,15 @@
 import {config } from "dotenv";
 import {AtpAgent} from "@atproto/api";
+import fs from 'fs';
+import path from 'path';
+import sharp from 'sharp';
 
 config({ path: '../../.env' });
+
+// Path to the image in src/images
+const imagePath = path.resolve('E:/Documents/2.Projects/bsky-image-bot/src/images/F5aC6AoaQAA0xeo.jpg');
+
+// -- Agent Init -- //
 
 const agent = new AtpAgent({
     service: 'https://bsky.social'
@@ -12,9 +20,19 @@ await agent.login({
     password: process.env.BSKY_PASSWORD ?? 'INCORRECT PASSWORD',
 })
 
-await agent.post({
-    text: 'Hello world! I posted this via the API.',
-    createdAt: new Date().toISOString()
-})
+const image = await agent.uploadBlob(fs.readFileSync(imagePath), { encoding: "image/jpeg" })
 
-console.log(process.env.BSKY_HANDLE);
+await agent.post({
+    text: new Date().toISOString(),
+    embed: {
+        $type: 'app.bsky.embed.images',
+        mimeType: "image/jpeg",
+        images: [
+            {
+              image: image.data.blob,
+              alt: 'alt'
+            }
+      ]
+    },
+    createdAt: new Date().toISOString()
+});
