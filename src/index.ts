@@ -1,6 +1,6 @@
-import Bot from "./lib/bot.js";
-import getPostText from "./lib/getPostText.js";
+import { runBot } from './lib/newBot.js';
 
-const text = await Bot.run(getPostText, { dryRun: true });
-
-console.log(`[${new Date().toISOString()}] Posted: "${text}"`);
+(async () => {
+    console.log("Starting the bot...");
+    await runBot();
+})();
