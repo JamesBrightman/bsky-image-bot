@@ -29,10 +29,10 @@ await agent.post({
         mimeType: "image/jpeg",
         images: [
             {
-              image: image.data.blob,
-              alt: 'alt'
+                image: image.data.blob,
+                alt: 'alt'
             }
-      ]
+        ]
     },
     createdAt: new Date().toISOString()
 });
